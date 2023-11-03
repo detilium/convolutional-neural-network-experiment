@@ -63,7 +63,7 @@ class Convolution:
 
         # generate the output for each filter (weight)
         for i in range(self.num_filters):
-            output[i] = correlate2d(self.input_data, self.filters[i], mode='same')
+            output[i] = correlate2d(self.input_data, self.filters[i], mode='valid')
 
         # apply ReLU activation function
         output = np.maximum(output, 0)
@@ -85,10 +85,10 @@ class Convolution:
         # loop through all filters to calculate the loss of a given filter
         for i in range(self.num_filters):
             # calculate the loss of the filter (weight)
-            filter_error = correlate2d(self.input_data, output_error[i], mode='same')
+            filter_error = correlate2d(self.input_data, output_error[i], mode='valid')
 
             # calculate gradient of loss with respect to the input data
-            input_error += correlate2d(output_error[i], filter_error[i], mode='same')
+            input_error += correlate2d(output_error[i], filter_error[i], mode='valid')
 
         # update parameters according to the learning rate
         self.filters -= learning_rate * filter_error
