@@ -48,8 +48,8 @@ class MaxPool:
                     start_j = j * self.pool_size
 
                     # calculate end positions
-                    end_i = start_i * self.pool_size
-                    end_j = start_j * self.pool_size
+                    end_i = start_i + self.pool_size
+                    end_j = start_j + self.pool_size
 
                     # create a patch/window from the input data
                     patch = input_data[c, start_i:end_i, start_j:end_j]
@@ -68,7 +68,7 @@ class MaxPool:
         This process ensures that the maximum gradient values flow through the MaxPooling layer and continue
         propagating through the network.
         :param output_error: Gradient of the layer with respect to the output of this layer (dE/dY)
-        :param learning_rate: Rate of learning
+        :param learning_rate: Rate of learning (not used in the max pooling layer)
         :return: Gradient of the error with respect to the input (dE/dX)
         """
         input_error = np.zeros_like(self.input_data)
