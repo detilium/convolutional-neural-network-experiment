@@ -1,6 +1,7 @@
 import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
+from sklearn.metrics import accuracy_score
 
 from layers.convolution import Convolution
 from layers.max_pool import MaxPool
@@ -46,5 +47,17 @@ y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
 # train network
-network.train(X_train, y_train, 0.01, 200)
+network.train(X_train, y_train, 0.05, 200)
 
+# test the network
+predictions = []
+for data in X_test:
+    prediction = network.predict(data)
+    one_hot_prediction = np.zeros_like(prediction)
+    one_hot_prediction[np.argmax(prediction)] = 1
+    predictions.append(one_hot_prediction.flatten())
+
+predictions = np.array(predictions)
+
+accuracy = accuracy_score(predictions, y_test)
+print(f'Testing done - Accuracy: {accuracy}')
