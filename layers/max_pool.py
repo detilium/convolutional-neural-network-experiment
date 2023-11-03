@@ -79,8 +79,8 @@ class MaxPool:
                     start_i = i * self.pool_size
                     start_j = j * self.pool_size
 
-                    end_i = start_i * self.pool_size
-                    end_j = start_j * self.pool_size
+                    end_i = start_i + self.pool_size
+                    end_j = start_j + self.pool_size
 
                     patch = self.input_data[c, start_i:end_i, start_j:end_j]
 
