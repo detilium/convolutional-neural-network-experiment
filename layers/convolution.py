@@ -3,6 +3,27 @@ from scipy.signal import correlate2d
 
 
 class Convolution:
+    """
+    A convolution is a dot product between the filter and the values of filter size at any given pixel on the image.
+    It is called a convolution, as the operating is called "convolving" of two matrices.
+        Example: If the first set of pixels in a filter size of (3, 3) in an image is:
+            i = 1, j = 1
+                [[0.0, 0.0, 0.0],
+                [0.4, 0.5, 0.9],
+                [1.0, 1.0, 1.0]]
+        and the filter has the following random values:
+                [[0.979], [0.278], [0.940],
+                [0.713], [0.048], [0.564],
+                [0.604], [0.327], [0.853]]
+        the dot product of the two will be = 1.18, which will be stored at (i, j) = (1, 1) in the output matrix.
+
+    The output shape of the convolution layer, will always be the same as the input, unless using padding.
+
+    Filters is a convolution layer, can be though of as pattern detectors. Some filters in the early stages of a
+    convolutional network, will be able to detect edges, some detect circles, some detect, corners, squares, etc.
+    The deeper you delve into the neural network,the more complex patterns a filter will detect.
+    Some filter will end up being animal detectors, detecting dogs, cats, mice, horses, etc.
+    """
     def __init__(self, input_shape, filter_size, num_filters):
         """
         Instantiate the convolution layer
@@ -41,7 +62,7 @@ class Convolution:
 
         # generate the output for each filter (weight)
         for i in range(self.num_filters):
-            output[i] = correlate2d(self.input_data, self.filters[i], mode='valid')
+            output[i] = correlate2d(self.input_data, self.filters[i], mode='same')
 
         # apply ReLU activation function
         output = np.maximum(output, 0)
@@ -63,10 +84,10 @@ class Convolution:
         # loop through all filters to calculate the loss of a given filter
         for i in range(self.num_filters):
             # calculate the loss of the filter (weight)
-            filter_error = correlate2d(self.input_data, output_error[i], mode='valid')
+            filter_error = correlate2d(self.input_data, output_error[i], mode='same')
 
             # calculate gradient of loss with respect to the input data
-            input_error += correlate2d(output_error[i], filter_error[i], mode='valid')
+            input_error += correlate2d(output_error[i], filter_error[i], mode='same')
 
         # update parameters according to the learning rate
         self.filters -= learning_rate * filter_error
