@@ -47,6 +47,7 @@ class Convolution:
         # instantiate the filters with random values as a start, these will be tuned accordingly
         # once we back propagate the loss (the error)
         self.filters = np.random.randn(*self.filter_shape)
+        # TODO: Why aren't the biases part of the calcuation?
         self.biases = np.random.randn(*self.output_shape)
 
     def forward(self, input_data):
