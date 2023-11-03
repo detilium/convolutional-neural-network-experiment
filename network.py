@@ -35,10 +35,10 @@ class Network:
                     correct_predictions += 1
 
                 # backwards propagation
-                output_error = self.loss_function(y[i], output.flatten().reshape(-1, 1))
+                output_error = self.loss_function_prime(y[i], output.flatten()).reshape(-1, 1)
 
                 for layer in reversed(self.layers):
-                    output_error = layer.backward(output_error)
+                    output_error = layer.backward(output_error, learning_rate)
 
             # epoch statistics
             average_loss = total_loss / len(X)
